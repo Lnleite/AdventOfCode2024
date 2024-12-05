@@ -17,8 +17,6 @@ function recursePuzzle(
   if (currString === word) {
     return 1;
   }
-  // console.log("column", currColumnIndex, puzzle[0].length);
-  // console.log("row", currRowIndex, puzzle.length);
 
   if (
     currColumnIndex >= puzzle[0].length ||
@@ -29,7 +27,6 @@ function recursePuzzle(
     return 0;
   }
   const currPuzzleLetter = puzzle[currRowIndex][currColumnIndex];
-  // console.log(currPuzzleLetter);
 
   if (currPuzzleLetter !== word[nextLetterIndex]) {
     return 0;
@@ -117,6 +114,40 @@ function crosswordPuzzle(word, data) {
   return totalWordsInPuzzle;
 }
 
+function XCrosswordPuzzle(word, data) {
+  const formatToArray = formatData(data);
+  let totalWordsInPuzzle = 0;
+  for (let i = 0; i < formatToArray.length; i++) {
+    for (let j = 0; j < formatToArray[0].length; j++) {
+      if (formatToArray[i][j] === word[1]) {
+        if (
+          i - 1 >= 0 &&
+          j - 1 >= 0 &&
+          i + 1 < formatToArray.length &&
+          j + 1 < formatToArray[0].length
+        ) {
+          const leftUpLetter = formatToArray[i - 1][j - 1];
+          const leftDownLetter = formatToArray[i + 1][j - 1];
+          const rightUpLetter = formatToArray[i - 1][j + 1];
+          const rightDownLetter = formatToArray[i + 1][j + 1];
+
+          const leftToRightDiagCorrect =
+            (leftUpLetter === word[0] && rightDownLetter === word[2]) ||
+            (leftUpLetter === word[2] && rightDownLetter === word[0]);
+          const rightToLeftDiagCorrect =
+            (leftDownLetter === word[0] && rightUpLetter === word[2]) ||
+            (leftDownLetter === word[2] && rightUpLetter === word[0]);
+
+          if (leftToRightDiagCorrect && rightToLeftDiagCorrect) {
+            totalWordsInPuzzle += 1;
+          }
+        }
+      }
+    }
+  }
+  return totalWordsInPuzzle;
+}
+
 function main() {
   const readFile = fs.readFileSync("./input.txt", "utf8");
   //   const readFile = `MMMSXXMASM
@@ -130,7 +161,8 @@ function main() {
   // MAMMMXMMMM
   // MXMXAXMASX`;
 
-  console.log(crosswordPuzzle("XMAS", readFile));
+  // console.log(crosswordPuzzle("XMAS", readFile));
+  console.log(XCrosswordPuzzle("MAS", readFile));
 }
 
 main();
