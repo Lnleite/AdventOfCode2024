@@ -24,31 +24,37 @@ function formatData(data) {
   return [rulesObject, printOrderArray];
 }
 
+function isCorrectRuleOrder(printOrderArray, rulesObject) {
+  let correctOrder = true;
+
+  for (let i = 1; i < printOrderArray.length; i++) {
+    const order = printOrderArray[i];
+    const rules = rulesObject[order];
+
+    if ("before" in rules) {
+      for (let j = i - 1; j >= 0; j--) {
+        const currentOrder = printOrderArray[j];
+        if (rules.before.has(currentOrder)) {
+          i = printOrderArray.length;
+          j = -1;
+          correctOrder = false;
+        }
+      }
+    }
+  }
+
+  return correctOrder;
+}
+
 function totalMiddleNumberCorrectPrintQueue(data) {
   const [rulesObject, printOrderArray] = formatData(data);
   let total = 0;
 
   printOrderArray.forEach((printOrder) => {
     const printOrderArray = printOrder.split(",");
-    let failedOrder = false;
+    const isCorrect = isCorrectRuleOrder(printOrderArray, rulesObject);
 
-    for (let i = 1; i < printOrderArray.length; i++) {
-      const order = printOrderArray[i];
-      const rules = rulesObject[order];
-
-      if ("before" in rules) {
-        for (let j = i - 1; j >= 0; j--) {
-          const currentOrder = printOrderArray[j];
-          if (rules.before.has(currentOrder)) {
-            i = printOrderArray.length;
-            j = -1;
-            failedOrder = true;
-          }
-        }
-      }
-    }
-
-    if (!failedOrder) {
+    if (isCorrect) {
       total += Number(printOrderArray[Math.floor(printOrderArray.length / 2)]);
     }
   });
