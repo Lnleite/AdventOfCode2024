@@ -1,0 +1,19 @@
+const fs = require("fs");
+
+function formatData(data) {}
+
+function main() {
+  // const readFile = fs.readFileSync("./input.txt", "utf8");
+  const readFile = `....#.....
+.........#
+..........
+..#.......
+.......#..
+..........
+.#..^.....
+........#.
+#.........
+......#...`;
+}
+
+main();
