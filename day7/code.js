@@ -34,6 +34,12 @@ function canNumsEqualTotal(currentIndex, currentTotal, needTotal, equationNum) {
       currentTotal * equationNum[currentIndex],
       needTotal,
       equationNum
+    ) ||
+    canNumsEqualTotal(
+      currentIndex + 1,
+      Number(`${currentTotal}${equationNum[currentIndex]}`),
+      needTotal,
+      equationNum
     )
   );
 }
